@@ -22,7 +22,7 @@ SoftwareSerial *moduleSerial = &moduleSS;
 // Hardware serial is also possible!
 // HardwareSerial *moduleSerial = &Serial1;
 
-ATcommands module = ATcommands(RST, false); // Use "false" if you don't want AT commands with newline, "true" otherwise
+BluetoothATCommand module = BluetoothATCommand(RST, false); // Use "false" if you don't want AT commands with newline, "true" otherwise
 static int deviceNum = 10000;
 
 void setup() {
