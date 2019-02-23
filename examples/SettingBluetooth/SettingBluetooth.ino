@@ -1,14 +1,21 @@
 /*
 
-  Micro Processor  With Bluetooth module
-  1. HC-05
-  2. HC-06
-
-  DEVICE_BAUD 8 : 115200
-
+  Micro Processor  With Bluetooth module  
   Made by Dreamwalker
   Date : 2019-02-23
-
+  
+  1. HC-05
+  2. HC-06
+  
+  DEVICE_BAUD 
+  1---------1200
+  2---------2400
+  3---------4800
+  4---------9600
+  5---------19200
+  6---------38400
+  7---------57600
+  8---------115200 
 
 */
 
@@ -34,14 +41,16 @@
 
 //#define SET_BAUD_DEFAULT
 
+/*----------------------------------------------------------------*/
+
 
 #ifdef ARDUINO_UNO_USER
-#define MCU_RX                2               // Remember MCU RX connects to module TX and vice versa
-#define MCU_TX                3
-#define RST                   4               // MCU pin to control module reset
+#define MCU_RX                2               // RX
+#define MCU_TX                3               // TX
+#define RST                   4               // 블루투스 모듈 리셋을 위한핀.
 #define DEVICE_BAUD           8
 
-SoftwareSerial moduleSS = SoftwareSerial(MCU_RX, MCU_TX); // MCU RX, TX
+SoftwareSerial moduleSS = SoftwareSerial(MCU_RX, MCU_TX); // SoftwareSerial(RX, TX)
 SoftwareSerial *moduleSerial = &moduleSS;
 #endif
 
@@ -80,18 +89,17 @@ static int deviceNum = 10000;
 void setup()
 {
   String setNameCommand = "AT+NAME" + String("AS") + String(deviceNum);
+  
   Serial.begin(SERIAL_BAUDRATE);
   moduleSerial->begin(BLUETOOTH_BAUDRATE);
+  
   module.begin(*moduleSerial);
-
   module.reset(LOW, 10);
-
-  module.sendBlindCommand("AT");
+  module.sendBlindCommand("AT"); 
+  
   delay(1000);
-
-  if (!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!")); 
   delay(1000);
-
   if (!module.sendCommand("AT")) Serial.println(F("Command failed!"));
   delay(1000);
 
