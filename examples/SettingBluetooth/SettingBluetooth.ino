@@ -32,11 +32,12 @@
  *  사용할 모듈에 따라 주석을 꼭 제거하세요 
  *  사용하지 않을 모듈은 모두 주석처리해야 문제없이 컴파일 됩니다.
  *---------------------------------------------------------------*/
- 
+
+
 #define ARDUINO_UNO_USER
 //#define ESP32_USER
 
-//#define HC_05
+#define HC_05
 #define HC_06
 
 //#define SET_BAUD_DEFAULT
