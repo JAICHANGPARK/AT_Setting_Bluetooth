@@ -1,4 +1,4 @@
-#ifdef BluetoothATCommand_h
+#ifndef BluetoothATCommand_h
 #define BluetoothATCommand_h
 
 #include "Arduino.h"

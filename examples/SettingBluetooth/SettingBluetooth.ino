@@ -7,7 +7,7 @@
     Last Modified: 10/20/2017
 */
 
-#include "../../BluetoothATCommand.h"
+#include "BluetoothATCommand.h"
 #include <SoftwareSerial.h>
 
 #define MCU_RX 2 // Remember MCU RX connects to module TX and vice versa
