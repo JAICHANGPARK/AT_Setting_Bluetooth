@@ -113,10 +113,16 @@ void setup()
 
 #ifdef HC_05
   if (!module.sendCommand("AT\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
-  if (!module.sendCommand("AT+VERSION?\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
-  if (!module.sendCommand("AT+ADDR?\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
-  if (!module.sendCommand(setNameCommand.c_str(), "OK", 2000)) Serial.println(F("Command failed!"));
-  if (!module.sendCommand("AT+UART=115200,0,0\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+VERSION?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+NAME?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+UART?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+ADDR?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand(setNameCommand.c_str(), "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+UART=115200,0,0\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  
+  if (!module.sendCommand("AT+NAME?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT+UART?\r\n", "OK", 1000)) Serial.println(F("Command failed!"));
+  
 #endif
 
 #ifdef HC_06
