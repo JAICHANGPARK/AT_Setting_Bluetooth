@@ -75,7 +75,8 @@ bool BluetoothATCommand::sendCommand(char *command, char *reply, uint16_t timeou
   }
 
   Serial.print(F("\t<--- ")); Serial.println(replybuffer);
-
+  memset(integerArray, 0, sizeof(integerArray));
+  
   if (replyMatch) return true;
   else return false;
 }

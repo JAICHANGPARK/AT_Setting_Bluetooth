@@ -1,13 +1,13 @@
 /*
 
-  Micro Processor  With Bluetooth module  
+  Micro Processor  With Bluetooth module
   Made by Dreamwalker
   Date : 2019-02-23
-  
+
   1. HC-05
   2. HC-06
-  
-  DEVICE_BAUD 
+
+  DEVICE_BAUD
   1---------1200
   2---------2400
   3---------4800
@@ -15,7 +15,7 @@
   5---------19200
   6---------38400
   7---------57600
-  8---------115200 
+  8---------115200
 
 */
 
@@ -23,22 +23,22 @@
 #include <SoftwareSerial.h>
 
 /*---------------------------------------------------------------/
- *  Mode Setting  (사용하는 보드 및 모드 빼고 전부 주석처리)
- *  1. 프로세서 선택
- *  2. 블루투스 모듈 선택
- *  3. Baudrate Defalt 여부 선택 
- *  
- *  Note :
- *  사용할 모듈에 따라 주석을 꼭 제거하세요 
- *  사용하지 않을 모듈은 모두 주석처리해야 문제없이 컴파일 됩니다.
- *---------------------------------------------------------------*/
+    Mode Setting  (사용하는 보드 및 모드 빼고 전부 주석처리)
+    1. 프로세서 선택
+    2. 블루투스 모듈 선택
+    3. Baudrate Defalt 여부 선택
+
+    Note :
+    사용할 모듈에 따라 주석을 꼭 제거하세요
+    사용하지 않을 모듈은 모두 주석처리해야 문제없이 컴파일 됩니다.
+  ---------------------------------------------------------------*/
 
 
 #define ARDUINO_UNO_USER
 //#define ESP32_USER
 
 #define HC_05
-#define HC_06
+//#define HC_06
 
 //#define SET_BAUD_DEFAULT
 
@@ -89,17 +89,24 @@ static int deviceNum = 10000;
 
 void setup()
 {
-  String setNameCommand = "AT+NAME" + String("AS") + String(deviceNum);
   
+#ifdef HC_06
+  String setNameCommand = "AT+NAME" + String("AS") + String(deviceNum);
+#endif
+
+#ifdef HC_05
+  String setNameCommand = "AT+NAME=" + String("AS") + String(deviceNum) + "\r\n";
+#endif
+
   Serial.begin(SERIAL_BAUDRATE);
   moduleSerial->begin(BLUETOOTH_BAUDRATE);
-  
+
   module.begin(*moduleSerial);
   module.reset(LOW, 10);
-  module.sendBlindCommand("AT"); 
-  
+  module.sendBlindCommand("AT");
+
   delay(1000);
-  if (!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!")); 
+  if (!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!"));
   delay(1000);
   if (!module.sendCommand("AT")) Serial.println(F("Command failed!"));
   delay(1000);
@@ -108,7 +115,7 @@ void setup()
   if (!module.sendCommand("AT\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
   if (!module.sendCommand("AT+VERSION?\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
   if (!module.sendCommand("AT+ADDR?\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
-  if (!module.sendCommand("AT+NAME=setNameCommand.c_str()\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand(setNameCommand.c_str(), "OK", 2000)) Serial.println(F("Command failed!"));
   if (!module.sendCommand("AT+UART=115200,0,0\r\n", "OK", 2000)) Serial.println(F("Command failed!"));
 #endif
 
