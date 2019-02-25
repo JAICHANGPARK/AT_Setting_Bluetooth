@@ -31,11 +31,11 @@
   ---------------------------------------------------------------*/
 
 
-//#define ARDUINO_UNO_USER
-#define ESP32_USER
+#define ARDUINO_UNO_USER
+//#define ESP32_USER
 
-#define HC_05
-//#define HC_06
+//#define HC_05
+#define HC_06
 
 //#define SET_BAUD_DEFAULT
 #define DEVICE_ID                 10000
@@ -43,8 +43,9 @@
 
 
 #ifdef ARDUINO_UNO_USER
-#include "BluetoothATCommand.h"
 #include <SoftwareSerial.h>
+#include "BluetoothATCommand.h"
+
 
 #define MCU_RX                    2               // RX
 #define MCU_TX                    3               // TX
@@ -219,9 +220,9 @@ void setup()
 #ifdef HC_06
   sendCommandForEsp32("AT\r\n", 1000);
   sendCommandForEsp32("AT\r\n", 1000);
-  sendCommandForEsp32("AT+VERSION\n", 1000);
-  sendCommandForEsp32(setNameCommand, 1000);
-  sendCommandForEsp32(setBaudrateCommand + "\n", 1000);
+  sendCommandForEsp32("AT+VERSION\n", 2000);
+  sendCommandForEsp32(setNameCommand + "\n", 2000);
+  sendCommandForEsp32(setBaudrateCommand + "\n", 2000);
 
 #endif
 
