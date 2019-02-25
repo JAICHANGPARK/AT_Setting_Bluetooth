@@ -9,8 +9,8 @@
 
 class BluetoothATCommand {
   public:
-    BluetoothATCommand(int8_t rst, bool newline = false);
-    begin(Stream &port);
+    void BluetoothATCommand(int8_t rst, bool newline = false);
+    void begin(Stream &port);
     void reset(uint8_t pulse, uint16_t duration = default_pulse_ms);
     bool sendBlindCommand(char *command);
     bool sendCommand(char *command, uint16_t timeout = default_timeout_ms);
