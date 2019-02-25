@@ -115,6 +115,31 @@ HardwareSerial bluetoothSerial(2);
 
 static int deviceNum = 10000;
 
+#ifdef ESP32_USER
+void sendCommandForEsp32(String command, long timeout) {
+
+  while (bluetoothSerial.available()) bluetoothSerial.read(); //clear buffer
+  uint8_t idx = 0;
+  bool replyMatch = false;
+  long timer = millis();
+  char replybuffer[255] = {0,};
+  bluetoothSerial.print(command);
+  Serial.print(F("\t-->")); Serial.println(command);
+
+  while (!replyMatch && (millis() - timer < 1000)) {
+    if (bluetoothSerial.available()) {
+      replybuffer[idx] = bluetoothSerial.read();
+      idx++;
+    }
+  }
+  Serial.print(F("\t <--- ")); Serial.println(replybuffer);
+  memset(replybuffer, 0, sizeof(replybuffer));
+
+}
+
+#endif
+
+
 void setup()
 {
 
@@ -172,6 +197,11 @@ void setup()
 #endif
 
 #ifdef ESP32_USER
+  sendCommandForEsp32("AT\r\n", 1000);
+  sendCommandForEsp32("AT\r\n", 1000);
+  sendCommandForEsp32("AT\r\n", 1000);
+  sendCommandForEsp32("AT+VERSION?\r\n", 2000);
+  
 
 #endif
 
@@ -184,30 +214,30 @@ void loop()
 }
 
 /* Baud-rates available: 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, or 115200, 256000, 512000, 962100
- *  
- *  Protocols available:
- * SERIAL_5N1   5-bit No parity 1 stop bit
- * SERIAL_6N1   6-bit No parity 1 stop bit
- * SERIAL_7N1   7-bit No parity 1 stop bit
- * SERIAL_8N1   (the default) 8-bit No parity 1 stop bit
- * SERIAL_5N2   5-bit No parity 2 stop bits 
- * SERIAL_6N2   6-bit No parity 2 stop bits
- * SERIAL_7N2   7-bit No parity 2 stop bits
- * SERIAL_8N2   8-bit No parity 2 stop bits 
- * SERIAL_5E1   5-bit Even parity 1 stop bit
- * SERIAL_6E1   6-bit Even parity 1 stop bit
- * SERIAL_7E1   7-bit Even parity 1 stop bit 
- * SERIAL_8E1   8-bit Even parity 1 stop bit 
- * SERIAL_5E2   5-bit Even parity 2 stop bit 
- * SERIAL_6E2   6-bit Even parity 2 stop bit 
- * SERIAL_7E2   7-bit Even parity 2 stop bit  
- * SERIAL_8E2   8-bit Even parity 2 stop bit  
- * SERIAL_5O1   5-bit Odd  parity 1 stop bit  
- * SERIAL_6O1   6-bit Odd  parity 1 stop bit   
- * SERIAL_7O1   7-bit Odd  parity 1 stop bit  
- * SERIAL_8O1   8-bit Odd  parity 1 stop bit   
- * SERIAL_5O2   5-bit Odd  parity 2 stop bit   
- * SERIAL_6O2   6-bit Odd  parity 2 stop bit    
- * SERIAL_7O2   7-bit Odd  parity 2 stop bit    
- * SERIAL_8O2   8-bit Odd  parity 2 stop bit    
+
+    Protocols available:
+   SERIAL_5N1   5-bit No parity 1 stop bit
+   SERIAL_6N1   6-bit No parity 1 stop bit
+   SERIAL_7N1   7-bit No parity 1 stop bit
+   SERIAL_8N1   (the default) 8-bit No parity 1 stop bit
+   SERIAL_5N2   5-bit No parity 2 stop bits
+   SERIAL_6N2   6-bit No parity 2 stop bits
+   SERIAL_7N2   7-bit No parity 2 stop bits
+   SERIAL_8N2   8-bit No parity 2 stop bits
+   SERIAL_5E1   5-bit Even parity 1 stop bit
+   SERIAL_6E1   6-bit Even parity 1 stop bit
+   SERIAL_7E1   7-bit Even parity 1 stop bit
+   SERIAL_8E1   8-bit Even parity 1 stop bit
+   SERIAL_5E2   5-bit Even parity 2 stop bit
+   SERIAL_6E2   6-bit Even parity 2 stop bit
+   SERIAL_7E2   7-bit Even parity 2 stop bit
+   SERIAL_8E2   8-bit Even parity 2 stop bit
+   SERIAL_5O1   5-bit Odd  parity 1 stop bit
+   SERIAL_6O1   6-bit Odd  parity 1 stop bit
+   SERIAL_7O1   7-bit Odd  parity 1 stop bit
+   SERIAL_8O1   8-bit Odd  parity 1 stop bit
+   SERIAL_5O2   5-bit Odd  parity 2 stop bit
+   SERIAL_6O2   6-bit Odd  parity 2 stop bit
+   SERIAL_7O2   7-bit Odd  parity 2 stop bit
+   SERIAL_8O2   8-bit Odd  parity 2 stop bit
 */
