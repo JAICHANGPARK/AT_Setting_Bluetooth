@@ -38,7 +38,7 @@
 //#define HC_06
 
 //#define SET_BAUD_DEFAULT
-
+#define DEVICE_ID                 10000
 /*----------------------------------------------------------------*/
 
 
@@ -114,6 +114,7 @@ HardwareSerial bluetoothSerial(2);
 
 
 static int deviceNum = 10000;
+int deviceBaudrate = 115200;
 
 #ifdef ESP32_USER
 void sendCommandForEsp32(String command, long timeout) {
@@ -144,11 +145,13 @@ void setup()
 {
 
 #ifdef HC_06
-  String setNameCommand = "AT+NAME" + String("AS") + String(deviceNum);
+  String setNameCommand = "AT+NAME" + String("AS") + String(DEVICE_ID);
+  String setBaudrateCommand = "AT+BAUD" + String(DEVICE_BAUD);
 #endif
 
 #ifdef HC_05
-  String setNameCommand = "AT+NAME=" + String("AS") + String(deviceNum) + "\r\n";
+  String setNameCommand = "AT+NAME=" + String("AS") + String(DEVICE_ID) + "\r\n";
+  String setBaudrateCommand = "AT+UART=" + String(deviceBaudrate) + ",0,0" + "\r\n";
 #endif
 
 #ifdef ARDUINO_UNO_USER
@@ -197,11 +200,30 @@ void setup()
 #endif
 
 #ifdef ESP32_USER
+#ifdef HC_05
   sendCommandForEsp32("AT\r\n", 1000);
   sendCommandForEsp32("AT\r\n", 1000);
   sendCommandForEsp32("AT\r\n", 1000);
-  sendCommandForEsp32("AT+VERSION?\r\n", 2000);
-  
+  sendCommandForEsp32("AT+VERSION?\r\n", 1000);
+  sendCommandForEsp32("AT+NAME?\r\n", 1000);
+  sendCommandForEsp32("AT+UART?\r\n", 1000);
+  sendCommandForEsp32("AT+ADDR?\r\n", 1000);
+  sendCommandForEsp32(setNameCommand, 1000);
+  sendCommandForEsp32(setBaudrateCommand, 1000);
+
+  sendCommandForEsp32("AT+NAME?\r\n", 1000);
+  sendCommandForEsp32("AT+UART?\r\n", 1000);
+
+#endif
+
+#ifdef HC_06
+  sendCommandForEsp32("AT\r\n", 1000);
+  sendCommandForEsp32("AT\r\n", 1000);
+  sendCommandForEsp32("AT+VERSION\n", 1000);
+  sendCommandForEsp32(setNameCommand, 1000);
+  sendCommandForEsp32(setBaudrateCommand + "\n", 1000);
+
+#endif
 
 #endif
 
